@@ -7,11 +7,13 @@
     $response = array();
     $response["email"] = $obj->email;
     $email = $obj->email;
+    $response["password"] = $obj->password;
+    $password = $obj->password;
 
     $con = mysqli_connect(DB_SERVER, DB_USER, DB_PASSWORD, DB_DATABASE)
     or die("could not connect to mysql from .php");
 
-    $sql = "SELECT * FROM `driver` WHERE `email` = '$email'";
+    $sql = "SELECT * FROM driver WHERE email = '$email' AND password = '$password'";
 
     if(empty($con)) {
         die("Connection failed: " . $con->mysql_error);
