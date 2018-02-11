@@ -1,9 +1,13 @@
 package com.bignerdranch.android.driverapp;
 
+import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.content.Intent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,6 +21,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class LoginActivity extends AsyncTask<String, String, String> {
+
+    private boolean login_success = false;
+    private Activity context;
+
+    public LoginActivity(Activity context) {
+        this.context = context;
+    }
 
     @Override
     protected void onPreExecute() {
@@ -57,8 +68,16 @@ public class LoginActivity extends AsyncTask<String, String, String> {
                 InputStream is = con.getInputStream();
                 BufferedReader buffer = new BufferedReader(new InputStreamReader(is));
 
-                Log.d("Login Response", buffer.readLine());
+                JSONObject response = new JSONObject(buffer.readLine());
+                int success = response.getInt("success");
+
+                if(success==1) login_success = true;
+                else login_success = false;
+
+                Log.d("Login Response", response.toString());
                 buffer.close();
+            } else {
+                throw new Exception();
             }
         } catch (Exception e) {
             Log.e("Login exception", e+"");
@@ -68,7 +87,14 @@ public class LoginActivity extends AsyncTask<String, String, String> {
 
     @Override
     protected void onPostExecute(String result) {
+        if (login_success) {
+            Log.d("Login postexecute", "logged in");
 
+            Intent intent = new Intent(context, DeliveryActivity.class);
+            context.startActivity(intent);
+            Toast.makeText(context, context.getResources().getString(R.string.login_msg), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, context.getResources().getString(R.string.invalid_credentials), Toast.LENGTH_LONG).show();
+        }
     }
-
 }

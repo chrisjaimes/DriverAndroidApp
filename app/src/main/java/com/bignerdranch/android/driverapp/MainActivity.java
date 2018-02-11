@@ -36,15 +36,6 @@ public class MainActivity extends AppCompatActivity {
         login_button = (Button) findViewById(R.id.login_button);
         email_tf = (TextView) findViewById(R.id.login_tf);
         password_tf = (TextView) findViewById(R.id.password_tf);
-
-        login_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("Login button", "clicked");
-
-                new LoginActivity().execute("http://10.0.2.2:80/driverapp-php/main.php");
-            }
-        });
     }
 
     @Override
@@ -81,15 +72,15 @@ public class MainActivity extends AppCompatActivity {
         Log.d("Destroy", "destroy");
     }
 
-    private void login(View v) {
-        String email = email_tf.getText().toString();
+    public void login(View v) {
+        String email = email_tf.getText().toString().toLowerCase();
         String password = password_tf.getText().toString();
 
         if(email == null || email.isEmpty())
-            Toast.makeText(this, "Enter an email!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, this.getResources().getString(R.string.empty_email), Toast.LENGTH_LONG).show();
         else if(password == null || password.isEmpty())
-            Toast.makeText(this, "Enter a password!", Toast.LENGTH_LONG).show();
-
-        new LoginActivity().execute(url, email, password);
+            Toast.makeText(this, this.getResources().getString(R.string.empty_password), Toast.LENGTH_LONG).show();
+        else
+            new LoginActivity(this).execute(url, email, password);
     }
 }
