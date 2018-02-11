@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.os.AsyncTask;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button login_button;
     private TextView email_tf, password_tf;
+    private String url = "http://10.0.2.2:80/driverapp-php/main.php"; //change later
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +42,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d("Login button", "clicked");
 
-                Login login = new Login();
-                login.execute("http://10.0.2.2:80/driverapp-php/main.php");
+                new LoginActivity().execute("http://10.0.2.2:80/driverapp-php/main.php");
             }
         });
     }
@@ -80,53 +81,15 @@ public class MainActivity extends AppCompatActivity {
         Log.d("Destroy", "destroy");
     }
 
-    private HttpURLConnection setConnection(URL url) throws IOException, JSONException {
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setDoInput(true);
-        con.setDoOutput(true);
-        con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-        con.setRequestProperty("Accept", "application/json");
-        con.setRequestMethod("POST");
-
+    private void login(View v) {
         String email = email_tf.getText().toString();
         String password = password_tf.getText().toString();
 
-        JSONObject body = new JSONObject();
-        body.put("email", email);
-        body.put("password", password);
+        if(email == null || email.isEmpty())
+            Toast.makeText(this, "Enter an email!", Toast.LENGTH_LONG).show();
+        else if(password == null || password.isEmpty())
+            Toast.makeText(this, "Enter a password!", Toast.LENGTH_LONG).show();
 
-        OutputStream os = con.getOutputStream();
-        os.write(body.toString().getBytes("UTF-8"));
-        os.close();
-
-        return con;
-    }
-
-    private class Login extends AsyncTask<String, String, String>{
-        @Override
-        protected void onPreExecute() {
-            Log.d("Login", "logging in...");
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            HttpURLConnection con;
-
-            try {
-                URL url = new URL(params[0]);
-                con = setConnection(url);
-
-                if(con.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    InputStream is = con.getInputStream();
-                    BufferedReader buffer = new BufferedReader(new InputStreamReader(is));
-
-                    Log.d("Login Response", buffer.readLine());
-                    buffer.close();
-                }
-            } catch (Exception e) {
-                Log.e("Login exception", e+"");
-            }
-            return "Done";
-        }
+        new LoginActivity().execute(url, email, password);
     }
 }
