@@ -31,7 +31,7 @@ public class LoginActivity extends AsyncTask<String, String, String> {
 
     @Override
     protected void onPreExecute() {
-        Log.d("Login", "logging in...");
+        Log.d("Login", "logging in preexecute...");
     }
 
     private HttpURLConnection setConnection(URL url, String email, String password) throws IOException, JSONException {
@@ -58,6 +58,8 @@ public class LoginActivity extends AsyncTask<String, String, String> {
     protected String doInBackground(String... params) {
         HttpURLConnection con;
 
+        Log.d("Login exception", "hey");
+
         String email = params[1];
         String password = params[2];
         try {
@@ -77,7 +79,7 @@ public class LoginActivity extends AsyncTask<String, String, String> {
                 Log.d("Login Response", response.toString());
                 buffer.close();
             } else {
-                throw new Exception();
+                Log.e("Login exception", "connection could not be established");
             }
         } catch (Exception e) {
             Log.e("Login exception", e+"");
@@ -90,7 +92,7 @@ public class LoginActivity extends AsyncTask<String, String, String> {
         if (login_success) {
             Log.d("Login postexecute", "logged in");
 
-            Intent intent = new Intent(context, DeliveryActivity.class);
+            Intent intent = new Intent(context, DeliveryListActivity.class);
             context.startActivity(intent);
             Toast.makeText(context, context.getResources().getString(R.string.login_msg), Toast.LENGTH_SHORT).show();
         } else {

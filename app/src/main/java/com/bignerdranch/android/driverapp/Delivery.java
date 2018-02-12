@@ -1,20 +1,16 @@
 package com.bignerdranch.android.driverapp;
 
-/**
- * Created by Owner on 2/11/2018.
- */
-
 public class Delivery {
     private long id;
     private String address;
     private String customerName;
-    private long driver_id;
+    private long driverId;
 
     public Delivery() {
         id = 132;
         address = "lksdjf";
-        customerName = "lskdfjssss";
-        driver_id = 4324;
+        customerName= "lskdfjssss";
+        driverId = 4324;
     }
     public long getId() {
         return id;
@@ -26,6 +22,20 @@ public class Delivery {
         return customerName;
     }
     public long getDriverId() {
-        return driver_id;
+        return driverId;
     }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+    public void setCustomer_name(String name) {
+        this.customerName = name;
+    }
+    public void setId(long id) {
+        this.id = id;
+    }
+    public void setDriver_id(long id) {
+        this.driverId = id;
+    }
+
 }
