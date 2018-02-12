@@ -6,12 +6,12 @@ public class Delivery {
     private String customerName;
     private long driverId;
 
-    public Delivery() {
-        id = 132;
-        address = "lksdjf";
-        customerName= "lskdfjssss";
-        driverId = 4324;
-    }
+//    public Delivery() {
+//        id = 132;
+//        address = "lksdjf";
+//        customerName= "lskdfjssss";
+//        driverId = 4324;
+//    }
     public long getId() {
         return id;
     }
